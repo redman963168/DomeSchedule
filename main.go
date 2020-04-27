@@ -7,7 +7,7 @@ import (
 
 var (
 	slackAPIToken = os.Getenv("SLACK_BOT_TOKEN")
-	slackChannel  = "apitテスト"
+	slackChannel  = os.Getenv("DOME_CHANNEL")
 )
 
 func main() {
