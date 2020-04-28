@@ -1,8 +1,8 @@
 package main
 
 import (
+	"log"
 	"os"
-	//"fmt"
 )
 
 var (
@@ -11,8 +11,11 @@ var (
 )
 
 func main() {
-	sche := GetSchedule()
-	if err := PostMsg(sche); err != nil {
-		panic(err)
+	sche, err := GetSchedule()
+	if err != nil {
+		log.Fatal(err)
+	}
+	if err = PostMsg(sche); err != nil {
+		log.Fatal(err)
 	}
 }
