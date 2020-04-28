@@ -11,12 +11,8 @@ var (
 )
 
 func main() {
-
 	sche := GetSchedule()
-	//fmt.Println(sche)
 	if err := PostMsg(sche); err != nil {
 		panic(err)
 	}
-	//run()
-	//
 }

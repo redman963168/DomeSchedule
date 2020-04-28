@@ -1,7 +1,6 @@
 package main
 
 import (
-	//"fmt"
 	"fmt"
 	"regexp"
 	"strings"
@@ -34,7 +33,6 @@ func GetSchedule() []Schedule {
 		topArea := s.Find(".top")
 		dateText := topArea.Find(".date.sp").Text()
 		dateText = checkRegexp(`\d{4}年\d{2}月\d{2}日`, dateText)
-		//dateText = ""
 		if dateText == "" {
 			fmt.Errorf("can't find date")
 		}
@@ -44,7 +42,6 @@ func GetSchedule() []Schedule {
 
 			btmArea := s.Find(".btm")
 			dateInfo := btmArea.Find(".date").Text()
-			//fmt.Println(strings.Replace(date.Text(), "\n", "", -1))
 
 			//スケジュールの取得
 			var schedule Schedule
@@ -52,11 +49,6 @@ func GetSchedule() []Schedule {
 			schedule.dateInfo = strings.Replace(dateInfo, "\n", "", -1)
 			schedules = append(schedules, schedule)
 		}
-
-		//fmt.Println(dateText)
-		//fmt.Println(date)
-		//fmt.Println(title.Text())
-
 	})
 
 	if len(schedules) <= 0 {

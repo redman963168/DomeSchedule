@@ -1,11 +1,8 @@
 package main
 
 import (
-
 	"github.com/slack-go/slack"
 )
-
-
 
 //PostMsg Slackにメッセージを送る
 func PostMsg(schedules []Schedule) error {

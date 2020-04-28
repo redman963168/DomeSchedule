@@ -1,4 +1,4 @@
-module DomeSchedule
+module github.com/redman963168/DomeSchedule
 
 go 1.14
 
