@@ -12,7 +12,7 @@ var (
 	slackChannel  = os.Getenv("DOME_CHANNEL")
 )
 
-// 終了コード
+// 終了コード 0,1...
 const (
 	ExitCodeOK = iota
 	ExitCodeError
