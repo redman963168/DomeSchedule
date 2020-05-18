@@ -4,7 +4,6 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"strings"
 )
 
@@ -19,17 +18,15 @@ func PostMsg(schedules []Schedule) error {
 
 	//Slackメッセージ送信リクエスト作成
 	slackURL := "https://slack.com/api/chat.postMessage"
-	values := url.Values{}
-	values.Set("token", slackAPIToken)
-	values.Add("channel", slackChannel)
-	values.Add("text", msg)
+	jsonText := `{"channel":"` + slackChannel + `","text":"` + msg + `"}`
 
-	req, err := http.NewRequest(http.MethodPost, slackURL, strings.NewReader(values.Encode()))
+	req, err := http.NewRequest(http.MethodPost, slackURL, strings.NewReader(jsonText))
 	if err != nil {
 		return err
 	}
 	//ヘッダーの追加
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req.Header.Set("Content-type", "application/json;charset=utf-8")
+	req.Header.Add("Authorization", "Bearer "+slackAPIToken)
 
 	//リクエストの送信
 	resp, err := http.DefaultClient.Do(req)
@@ -39,7 +36,7 @@ func PostMsg(schedules []Schedule) error {
 	defer resp.Body.Close()
 
 	//レスポンスの確認
-	if resp.StatusCode != 200 {
+	if resp.StatusCode != http.StatusOK {
 		body, _ := ioutil.ReadAll(resp.Body)
 		return errors.New(string(body))
 	}
