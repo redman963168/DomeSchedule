@@ -4,11 +4,19 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 )
 
 //PostMsg Slackにメッセージを送る
 func PostMsg(schedules []Schedule) error {
+	//SlackのAPIトークン、チャンネル名
+	var (
+		slackAPIToken = os.Getenv("SLACK_BOT_TOKEN")
+		slackChannel  = os.Getenv("DOME_CHANNEL")
+		slackURL      = "https://slack.com/api/chat.postMessage"
+	)
+
 	// メッセージ用に結合
 	msg := "【本日の京セラドームの予定】"
 	for _, sche := range schedules {
@@ -17,7 +25,6 @@ func PostMsg(schedules []Schedule) error {
 	}
 
 	//Slackメッセージ送信リクエスト作成
-	slackURL := "https://slack.com/api/chat.postMessage"
 	jsonText := `{"channel":"` + slackChannel + `","text":"` + msg + `"}`
 
 	req, err := http.NewRequest(http.MethodPost, slackURL, strings.NewReader(jsonText))
