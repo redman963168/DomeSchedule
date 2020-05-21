@@ -23,14 +23,17 @@ type CLI struct {
 //Run 実処理
 func (c *CLI) Run(args []string) int {
 	//引数設定
+	var showVersion bool
 	flg := flag.NewFlagSet("cli", flag.ContinueOnError)
-	var (
-		verOpt = flg.Bool("version", false, "Show version info")
-	)
-	flg.Parse(args[1:])
+	flg.SetOutput(c.errStream)
+	flg.BoolVar(&showVersion, "version", false, "Show version info")
+	if err := flg.Parse(args[1:]); err != nil {
+		fmt.Fprintln(c.errStream, os.ErrInvalid, err)
+		return ExitCodeError
+	}
 
 	//バージョン表示
-	if *verOpt {
+	if showVersion {
 		fmt.Fprintln(c.outStream, version)
 		return ExitCodeOK
 	}
@@ -38,13 +41,13 @@ func (c *CLI) Run(args []string) int {
 	//スケジュール取得
 	sche, err := GetSchedule()
 	if err != nil {
-		fmt.Fprintln(c.errStream, os.ErrInvalid, err)
+		fmt.Fprintln(c.errStream, err)
 		return ExitCodeError
 	}
 
 	//スケジュールPOST
 	if err = PostMsg(sche); err != nil {
-		fmt.Fprintln(c.errStream, os.ErrInvalid, err)
+		fmt.Fprintln(c.errStream, err)
 		return ExitCodeError
 	}
 
