@@ -20,6 +20,18 @@ type CLI struct {
 	outStream, errStream io.Writer
 }
 
+//DomeEventPage ドームのURL
+type DomeEventPage struct {
+	url string
+}
+
+//SlackParameter slackAPIに必要な情報
+type SlackParameter struct{
+	token string
+	channel string
+	url string
+}
+
 //Run 実処理
 func (c *CLI) Run(args []string) int {
 	//引数設定
@@ -39,14 +51,14 @@ func (c *CLI) Run(args []string) int {
 	}
 
 	//スケジュール取得
-	sche, err := GetSchedule()
+	sche, err := dome.GetSchedule()
 	if err != nil {
 		fmt.Fprintln(c.errStream, err)
 		return ExitCodeError
 	}
 
 	//スケジュールPOST
-	if err = PostMsg(sche); err != nil {
+	if err = slack.PostMsg(sche); err != nil {
 		fmt.Fprintln(c.errStream, err)
 		return ExitCodeError
 	}

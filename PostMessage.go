@@ -4,19 +4,11 @@ import (
 	"errors"
 	"io/ioutil"
 	"net/http"
-	"os"
 	"strings"
 )
 
 //PostMsg Slackにメッセージを送る
-func PostMsg(schedules []Schedule) error {
-	//SlackのAPIトークン、チャンネル名
-	var (
-		slackAPIToken = os.Getenv("SLACK_BOT_TOKEN")
-		slackChannel  = os.Getenv("DOME_CHANNEL")
-		slackURL      = "https://slack.com/api/chat.postMessage"
-	)
-
+func (slack *SlackParameter) PostMsg(schedules []Schedule) error {
 	// メッセージ用に結合
 	msg := "【本日の京セラドームの予定】"
 	for _, sche := range schedules {
@@ -25,15 +17,15 @@ func PostMsg(schedules []Schedule) error {
 	}
 
 	//Slackメッセージ送信リクエスト作成
-	jsonText := `{"channel":"` + slackChannel + `","text":"` + msg + `"}`
+	jsonText := `{"channel":"` + slack.channel + `","text":"` + msg + `"}`
 
-	req, err := http.NewRequest(http.MethodPost, slackURL, strings.NewReader(jsonText))
+	req, err := http.NewRequest(http.MethodPost, slack.url, strings.NewReader(jsonText))
 	if err != nil {
 		return err
 	}
 	//ヘッダーの追加
 	req.Header.Set("Content-type", "application/json;charset=utf-8")
-	req.Header.Add("Authorization", "Bearer "+slackAPIToken)
+	req.Header.Add("Authorization", "Bearer "+slack.token)
 
 	//リクエストの送信
 	resp, err := http.DefaultClient.Do(req)

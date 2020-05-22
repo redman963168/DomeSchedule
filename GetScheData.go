@@ -16,11 +16,13 @@ type Schedule struct {
 }
 
 //GetSchedule スケジュールの取得
-func GetSchedule() ([]Schedule, error) {
+func (dome *DomeEventPage) GetSchedule() ([]Schedule, error) {
 	nowDate := time.Now()
 	year := nowDate.Format("2006")
 	month := nowDate.Format("1")
-	url := "https://www.kyoceradome-osaka.jp/events/?yearId=" + year + "&monthId= " + month
+	url := dome.url
+	url = strings.Replace(url, "%YEAR%", year, -1)
+	url = strings.Replace(url, "%MONTH%", month, -1)
 	schedules := []Schedule{}
 	ExistedDate := true
 
@@ -39,7 +41,7 @@ func GetSchedule() ([]Schedule, error) {
 		}
 		//本日予定か確認
 		if nowDate.Format("2006年01月02日") == dateText {
-			title := topArea.Find("a").Text()
+			title := topArea.Find("h2").Text()
 
 			btmArea := s.Find(".btm")
 			dateInfo := btmArea.Find(".date").Text()
