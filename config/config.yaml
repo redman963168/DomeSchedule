@@ -1,0 +1,7 @@
+dome_params:
+  url: "https://www.kyoceradome-osaka.jp/events/?yearId=%YEAR%&monthId=%MONTH%"
+  year: "%YEAR%"
+  month: "%MONTH%"
+slack_params:
+  channel: apitテスト
+  url: https://slack.com/api/chat.postMessage
