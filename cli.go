@@ -20,16 +20,18 @@ type CLI struct {
 	outStream, errStream io.Writer
 }
 
-//DomeEventPage ドームのURL
-type DomeEventPage struct {
-	url string
+//DomeParameter ドームのURL情報
+type DomeParameter struct {
+	URL   string
+	Year  string //置換用文字列
+	Month string //置換用文字列
 }
 
 //SlackParameter slackAPIに必要な情報
-type SlackParameter struct{
-	token string
-	channel string
-	url string
+type SlackParameter struct {
+	Token   string
+	Channel string
+	URL     string
 }
 
 //Run 実処理
@@ -51,14 +53,13 @@ func (c *CLI) Run(args []string) int {
 	}
 
 	//スケジュール取得
-	sche, err := dome.GetSchedule()
+	sche, err := y.Dome.GetSchedule()
 	if err != nil {
 		fmt.Fprintln(c.errStream, err)
 		return ExitCodeError
 	}
-
 	//スケジュールPOST
-	if err = slack.PostMsg(sche); err != nil {
+	if err = y.Slack.PostMsg(sche); err != nil {
 		fmt.Fprintln(c.errStream, err)
 		return ExitCodeError
 	}

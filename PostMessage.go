@@ -17,15 +17,15 @@ func (slack *SlackParameter) PostMsg(schedules []Schedule) error {
 	}
 
 	//Slackメッセージ送信リクエスト作成
-	jsonText := `{"channel":"` + slack.channel + `","text":"` + msg + `"}`
+	jsonText := `{"channel":"` + slack.Channel + `","text":"` + msg + `"}`
 
-	req, err := http.NewRequest(http.MethodPost, slack.url, strings.NewReader(jsonText))
+	req, err := http.NewRequest(http.MethodPost, slack.URL, strings.NewReader(jsonText))
 	if err != nil {
 		return err
 	}
 	//ヘッダーの追加
 	req.Header.Set("Content-type", "application/json;charset=utf-8")
-	req.Header.Add("Authorization", "Bearer "+slack.token)
+	req.Header.Add("Authorization", "Bearer "+slack.Token)
 
 	//リクエストの送信
 	resp, err := http.DefaultClient.Do(req)

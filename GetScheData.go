@@ -16,13 +16,13 @@ type Schedule struct {
 }
 
 //GetSchedule スケジュールの取得
-func (dome *DomeEventPage) GetSchedule() ([]Schedule, error) {
+func (dome *DomeParameter) GetSchedule() ([]Schedule, error) {
 	nowDate := time.Now()
 	year := nowDate.Format("2006")
 	month := nowDate.Format("1")
-	url := dome.url
-	url = strings.Replace(url, "%YEAR%", year, -1)
-	url = strings.Replace(url, "%MONTH%", month, -1)
+	url := dome.URL
+	url = strings.Replace(url, dome.Year, year, -1)
+	url = strings.Replace(url, dome.Month, month, -1)
 	schedules := []Schedule{}
 	ExistedDate := true
 

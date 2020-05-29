@@ -1,23 +1,29 @@
 package main
 
 import (
+	"io/ioutil"
+	"log"
 	"os"
-	//"github.com/go-yaml/yaml"
+
+	"github.com/go-yaml/yaml"
 )
 
-var (
-	dome  *DomeEventPage
-	slack *SlackParameter
-)
+type yml struct {
+	Dome  DomeParameter  `yaml:"dome_params"`
+	Slack SlackParameter `yaml:"slack_params"`
+}
+
+var y *yml
 
 func init() {
-	dome = &DomeEventPage{
-		url: "https://www.kyoceradome-osaka.jp/events/?yearId=%YEAR%&monthId=%MONTH%", //yamlに変更
+	//yaml読み込み
+	buf, err := ioutil.ReadFile("config/config.yaml")
+	if err != nil {
+		log.Fatal(err)
 	}
-	slack = &SlackParameter{
-		token:   os.Getenv("SLACK_BOT_TOKEN"),             //yamlに変更
-		channel: os.Getenv("DOME_CHANNEL"),                //yamlに変更
-		url:     "https://slack.com/api/chat.postMessage", //yamlに変更
+	err = yaml.Unmarshal(buf, &y)
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
